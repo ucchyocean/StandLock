@@ -1,0 +1,114 @@
+name: ${project.name}
+version: ${project.version}
+main: org.bitbucket.ucchy.sl.StandLock
+description: Armorstand lock plugin
+author: ucchy
+softdepend: [Multiverse-Core,MultiWorld]
+
+commands:
+  standlock:
+    description: Commands of StandLock
+    aliases: [sl]
+    usage: |
+           /<command> info - View detail of lock.
+           /<command> limits - View information of lock limit.
+           /<command> private - Lock armor stand.
+           /<command> remove - Unlock armor stand.
+           /<command> persist [lock|unlock|info|off] - Lock/Unlock armor stand repeatedly.
+           /<command> reload - Reload all of data.
+    permission: standlock.command
+    permission-message: 'You don''t have a permission "<permission>".'
+
+  sinfo:
+    description: View detail of lock.
+    usage: |
+           /<command> - View detail of lock.
+    permission: standlock.command.info
+    permission-message: 'You don''t have a permission "<permission>".'
+
+  slimits:
+    description: View information of lock limit.
+    usage: |
+           /<command> - View information of lock limit.
+    permission: standlock.command.limits
+    permission-message: 'You don''t have a permission "<permission>".'
+
+  sprivate:
+    description: Lock armor stand.
+    usage: |
+           /<command> - Lock armor stand.
+    permission: standlock.command.private
+    permission-message: 'You don''t have a permission "<permission>".'
+
+  sremove:
+    description: Unlock armor stand.
+    usage: |
+           /<command> - Unlock armor stand.
+    permission: standlock.command.remove
+    permission-message: 'You don''t have a permission "<permission>".'
+
+  spersist:
+    description: Lock/Unlock armor stand repeatedly.
+    usage: |
+           /<command> [lock|unlock|info|off] - Lock/Unlock armor stand repeatedly.
+    permission: standlock.command.persist
+    permission-message: 'You don''t have a permission "<permission>".'
+
+permissions:
+  standlock.command:
+    description: Permission of command.
+    default: true
+  standlock.command.info:
+    description: Permission of info command.
+    default: true
+  standlock.command.limits:
+    description: Permission of limits command.
+    default: true
+  standlock.command.private:
+    description: Permission of private command.
+    default: true
+  standlock.command.remove:
+    description: Permission of remove command.
+    default: true
+  standlock.command.persist:
+    description: Permission of persist command.
+    default: true
+  standlock.command.reload:
+    description: Permission of reload command.
+    default: op
+  'standlock.command.*':
+    description: Permissions of all commands.
+    children:
+      standlock.command: true
+      standlock.command.info: true
+      standlock.command.limits: true
+      standlock.command.private: true
+      standlock.command.remove: true
+      standlock.command.persist: true
+      standlock.command.reload: true
+
+  standlock.entity.place:
+    description: Permission to place new ArmorStand.
+    default: true
+  standlock.entity.break:
+    description: Permission to remove none-locked ArmorStand.
+    default: true
+  standlock.entity.admin:
+    description: Permission to access none-owner locked ArmorStand.
+    default: op
+  standlock.entity.infinite-place:
+    description: Permission to place ArmorStand infinite, regardless place limits.
+    default: op
+  'standlock.entity.*':
+    description: Permissions of all entity access.
+    children:
+      standlock.entity.place: true
+      standlock.entity.break: true
+      standlock.entity.admin: true
+      standlock.entity.infinite-place: true
+
+  'standlock.*':
+    description: All of permissions.
+    children:
+      'standlock.command.*': true
+      'standlock.entity.*': true

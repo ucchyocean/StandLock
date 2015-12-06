@@ -1,0 +1,21 @@
+# ${project.name} v${project.version}
+# @author     ucchy
+# @license    LGPLv3
+# @copyright  Copyright ucchy 2015
+
+# メッセージの言語
+lang: ja
+
+# 1人あたりのArmorStandの設置数上限です。-1で無限大に設定することができます。
+# パーミッション "standlock.entity.infinite-place" を持っている人や、OPは、
+# この制限を受けずに無制限に設置可能です。
+armorStandLimit: 50
+
+# 地面のみが壊されていて、ブロックアップデートが発生したときの、対応モード。
+# REGEN_STONE -> 石で地面を再生します。ロック情報は維持します。
+# EXTINCTION -> 地面を再生せず、スタンドおよびスタンドの中身を消去し、ドロップもしないようにします。ロック情報は削除されます。
+# ITEM_DROP -> 地面を再生せず、スタンドおよびスタンドの中身はアイテムとしてドロップします。ロック情報は削除されます。
+groundMode: REGEN_STONE
+
+# スタンドを設置した時に、自動的にロックがかかるかどうかを設定することができます。
+autoLock: true

@@ -1,0 +1,34 @@
+# ${project.name} v${project.version}
+# @author     ucchy
+# @license    LGPLv3
+# @copyright  Copyright ucchy 2015
+
+PermissionDeniedPlace: '&cYou don''t have a permission to place new armor stand.'
+PermissionDeniedBreak: '&cYou don''t have a permission to remove armor stand.'
+PermissionDeniedLock: '&cYou don''t have a permission to lock armor stand.'
+PermissionDeniedUnlock: '&cYou don''t have a permission to unlock armor stand.'
+PermissionDeniedCommand: '&cYou don''t have a permission.'
+ExceedLockLimit: '&cYou cannot make new lock, because you exceed the lock limit.'
+BlockPlaceDenied: '&cYou cannot place block here, because this armor stand is locked.'
+ArmorStandLocked: '&cThis armor stand is locked.'
+ArmorStandUnlocked: '&cThis armor stand is not locked.'
+ArmorStandAlreadyLocked: '&cThis armor stand is locked already.'
+ArmorStandNotOwner: '&cYou cannot unlock, because this armor stand is owned by the other player.'
+NotInGame: '&cThis command can be run only in game.'
+
+PersistMode: '&bYou entered a persist mode. To exit mode, please run "/spersist" command.'
+PersistOff: '&bYou exited a persist mode.'
+PunchInfo: '&bPunch the armor stand to view lock information.'
+PunchLock: '&bPunch the armor stand to lock.'
+PunchUnlock: '&bPunch the armor stand to unlock.'
+
+LockRemoved: '&aArmor stand lock was removed.'
+Locked: '&aArmor stand was locked'
+
+InformationReload: '&aAll data were reloaded.'
+
+InformationOwner: 'Owner: &a%player&r(&a%uuid&r)'
+UnknownUUID: 'Unknown'
+
+InformationLimits: 'Your lock count/limits: &a%now&r/&a%limit&r'
+Infinity: 'infinity'
