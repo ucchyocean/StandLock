@@ -105,10 +105,6 @@ public class StandLockListener implements Listener {
                     return;
                 }
 
-                // スタンドを浮遊させる。
-                // TODO: 要検討。浮遊させるか、横からの設置を禁止するか。
-                stand.setGravity(false);
-
                 if ( config.isAutoLock() ) {
                     // 自動ロック処理
 
@@ -121,6 +117,10 @@ public class StandLockListener implements Listener {
                         stand.remove();
                         return;
                     }
+
+                    // スタンドを浮遊させる。
+                    // TODO: 要検討。浮遊させるか、横からの設置を禁止するか。
+                    stand.setGravity(false);
 
                     // 新しいロックデータを登録する
                     lockManager.addLockData(player.getUniqueId(), stand);
@@ -218,11 +218,6 @@ public class StandLockListener implements Listener {
         // ロックデータ取得
         LockData ld = lockManager.getLockDataByArmorStand(stand);
 
-        // ロックデータが無いなら何もしない
-        if ( ld == null ) {
-            return;
-        }
-
         // 攻撃者取得
         Player damager = null;
         if ( event.getDamager() instanceof Player ) {
@@ -231,6 +226,21 @@ public class StandLockListener implements Listener {
             if ( ((Projectile)event.getDamager()).getShooter() instanceof Player ) {
                 damager = (Player)((Projectile)event.getDamager()).getShooter();
             }
+        }
+
+        // ロックデータが無い場合
+        if ( ld == null ) {
+
+            // 権限がなければ、操作を禁止する
+            if ( damager == null || !damager.hasPermission(PERMISSION + ".break") ) {
+                if ( damager != null ) {
+                    damager.sendMessage(Messages.get("PermissionDeniedBreak"));
+                }
+                event.setCancelled(true);
+                return;
+            }
+
+            return; // ロックデータが無い場合はここで終わり。
         }
 
         // 所有者でなくて、管理者でもなければ、操作を禁止する
