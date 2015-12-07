@@ -19,7 +19,6 @@ public class StandLockConfig {
 
     private String lang;
     private int armorStandLimit;
-    private WallMode groundMode;
     private boolean autoLock;
 
     /**
@@ -52,8 +51,6 @@ public class StandLockConfig {
 
         lang = conf.getString("lang", "ja");
         armorStandLimit = conf.getInt("armorStandLimit", 100);
-        groundMode = WallMode.fromString(
-                conf.getString("groundMode"), WallMode.REGEN_STONE);
         autoLock = conf.getBoolean("autoLock", true);
     }
 
@@ -63,10 +60,6 @@ public class StandLockConfig {
 
     public int getArmorStandLimit() {
         return armorStandLimit;
-    }
-
-    public WallMode getGroundMode() {
-        return groundMode;
     }
 
     public boolean isAutoLock() {
