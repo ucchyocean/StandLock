@@ -57,6 +57,7 @@ public class StandLockListener implements Listener {
 
         // アーマースタンドの設置でなければ無視する
         if ( event.getAction() != Action.RIGHT_CLICK_BLOCK
+                || event.getItem() == null
                 || event.getItem().getType() != Material.ARMOR_STAND ) {
             return;
         }
@@ -129,181 +130,6 @@ public class StandLockListener implements Listener {
             }
         }.runTaskLater(StandLock.getInstance(), 1);
     }
-//
-//    /**
-//     * かべかけ物が破壊された時に呼び出されるイベント
-//     * @param event
-//     */
-//    @EventHandler(priority=EventPriority.HIGHEST)
-//    public void onHangingBreak(HangingBreakEvent event) {
-//
-//        Hanging hanging = event.getEntity();
-//
-//        // 額縁でなければ無視する
-//        if ( !(hanging instanceof ItemFrame) ) {
-//            return;
-//        }
-//
-//        // エンティティによる破壊なら、HangingBreakByEntityEventで処理するので、
-//        // ここでは何もしない。
-//        if ( event instanceof HangingBreakByEntityEvent ) {
-//            return;
-//        }
-//
-//        // 対象物のロックデータを取得する
-//        LockData ld = lockManager.getLockDataByHanging(hanging);
-//
-//        // ロックデータが無い場合はイベントを無視する
-//        if ( ld == null ) {
-//            return;
-//        }
-//
-//        switch (event.getCause()) {
-//
-//        case ENTITY:
-//            // Entityにより破壊された場合。
-//            // HangingBreakByEntityEventの方で処理するので、ここでは何もしない
-//            break;
-//
-//        case EXPLOSION:
-//            // 爆破により破壊された場合。
-//            // イベントをキャンセルして復元させる。
-//            // ただし、かけられていた壁も爆破で消滅していた場合は、
-//            // しばらくした後に（100ticks後くらい）同じイベントがPHYSICSで呼び出される。
-//            event.setCancelled(true);
-//            break;
-//
-//        case OBSTRUCTION:
-//            // 額縁のある場所が、ブロックに塞がれた場合。
-//            // CB1.7.10-R0.1では、Hangingの設置方向によっては、
-//            // なぜかOBSTRUCTIONではなくPHYSICSになる（不具合？）。
-//
-//            // hangingにかぶさる位置のブロックをAIRにし、イベントをキャンセルする
-//            Block obst = hanging.getLocation().getBlock();
-//            obst.setType(Material.AIR);
-//
-//            event.setCancelled(true);
-//            break;
-//
-//        case PHYSICS:
-//            // 額縁のかかっている壁のブロックが無くなったり、
-//            // 壁掛け物として不自然な状態になったりしたとき、
-//            // ワールドのPhysicsUpdate処理で剥がされた場合。
-//            // fall through
-//        case DEFAULT:
-//            // 破壊された原因が不明な場合。
-//            // 他のプラグインなどで、Hangingが強制除去された場合などに発生する。
-//            // default: のところでまとめて対応する。
-//            // fall through
-//        default:
-//            // 破壊原因が不明な場合。
-//
-//            // PHYSICS、DEFAULTは、ここでまとめて処理する。
-//
-//            // Hangingにかぶっているブロックがある場合は、AIRにして消滅させる。
-//            obst = hanging.getLocation().getBlock();
-//            obst.setType(Material.AIR);
-//
-//            if ( config.getWallMode() == WallMode.REGEN_STONE ) {
-//                // 設置されていたであろう壁の方向に石を作って、壁を復活させる。
-//                // イベントをキャンセルする。
-//                // ロック情報はそのままにする。
-//                Block wall = obst.getRelative(hanging.getAttachedFace());
-//                if ( wall.getType() == Material.AIR || wall.isLiquid() ) {
-//                    wall.setType(Material.STONE);
-//                }
-//                event.setCancelled(true);
-//
-//            } else if ( config.getWallMode() == WallMode.EXTINCTION ) {
-//                // hangingエンティティを消去して、ドロップしないようにする。
-//                // イベントをキャンセルする。
-//                // ロック情報を削除する。
-//                lockManager.removeLockData(hanging);
-//                hanging.remove();
-//                event.setCancelled(true);
-//
-//            } else if ( config.getWallMode() == WallMode.ITEM_DROP ) {
-//                // バニラ挙動と同様。つまり何もしない。
-//                // ロック情報の削除はする。
-//                lockManager.removeLockData(hanging);
-//
-//            }
-//
-//            break;
-//        }
-//    }
-//
-//    /**
-//     * かべかけ物がエンティティに破壊された時に呼び出されるイベント
-//     * @param event
-//     */
-//    @EventHandler(priority=EventPriority.HIGHEST)
-//    public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
-//
-//        Hanging hanging = event.getEntity();
-//
-//        // 額縁でなければ無視する
-//        if ( !(hanging instanceof ItemFrame) ) {
-//            return;
-//        }
-//
-//        // 事前コマンドが実行されている場合の処理
-//        if ( event.getRemover() instanceof Player ) {
-//            Player damager = (Player)event.getRemover();
-//            if ( processPrecommand(damager, hanging) ) {
-//                event.setCancelled(true);
-//                return;
-//            }
-//        }
-//
-//        // ==== 以下、額縁に対する攻撃の保護処理 ====
-//
-//        // 対象物のロックデータを取得する
-//        LockData ld = lockManager.getLockDataByHanging(hanging);
-//
-//        // ロックデータが無い場合
-//        if ( ld == null ) {
-//
-//            // 権限がなければ、操作を禁止する
-//            if ( event.getRemover() instanceof Player ) {
-//                Player remover = (Player)event.getRemover();
-//                if ( !remover.hasPermission(PERMISSION + ".break") ) {
-//                    remover.sendMessage(Messages.get("PermissionDeniedBreak"));
-//                    event.setCancelled(true);
-//                }
-//            }
-//
-//            return; // ロックデータが無い場合は、ここで処理終了。
-//        }
-//
-//        // 操作者取得
-//        Player remover = null;
-//        if ( event.getRemover() instanceof Player ) {
-//            remover = (Player)event.getRemover();
-//        } else if ( event.getRemover() instanceof Projectile ) {
-//            if ( ((Projectile)event.getRemover()).getShooter() instanceof Player ) {
-//                remover = (Player)((Projectile)event.getRemover()).getShooter();
-//            }
-//        }
-//
-//        // 所有者でなくて、管理者でもなければ、操作を禁止する
-//        if ( remover == null ||
-//                (!ld.getOwnerUuid().equals(remover.getUniqueId()) &&
-//                 !remover.hasPermission(PERMISSION + ".admin") ) ) {
-//            event.setCancelled(true);
-//            if ( remover != null ) {
-//                remover.sendMessage(Messages.get("ItemFrameLocked"));
-//            }
-//            return;
-//        }
-//
-//        // ロック情報を削除する
-//        lockManager.removeLockData(hanging);
-//
-//        // メッセージを出す
-//        remover.sendMessage(Messages.get("LockRemoved"));
-//    }
-
 
     /**
      * ピストンが伸びたときのイベント
@@ -376,7 +202,7 @@ public class StandLockListener implements Listener {
             return;
         }
 
-        ArmorStand stand = (ArmorStand)event.getEntity();
+        final ArmorStand stand = (ArmorStand)event.getEntity();
 
         // 事前コマンドが実行されている場合の処理
         if ( event.getDamager() instanceof Player ) {
@@ -417,9 +243,21 @@ public class StandLockListener implements Listener {
             return;
         }
 
-        // ロックを解除する
-        lockManager.removeLockData(stand);
-        damager.sendMessage(Messages.get("LockRemoved"));
+        final Player player = damager;
+
+        // 1tick後に処理する
+        new BukkitRunnable() {
+            public void run() {
+
+                // スタンドが消去されたなら、ロックを解除しておく。
+                if ( stand.isDead() ) {
+                    lockManager.removeLockData(stand);
+                    if ( player != null ) {
+                        player.sendMessage(Messages.get("LockRemoved"));
+                    }
+                }
+            }
+        }.runTaskLater(StandLock.getInstance(), 1);
     }
 
     /**
