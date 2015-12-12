@@ -130,6 +130,13 @@ public class StandLockListener implements Listener {
     @EventHandler
     public void onBlockPistonExtended(BlockPistonExtendEvent event) {
 
+        // ピストンが伸びた先にスタンドがあるなら、イベントをキャンセルする。
+        Location extLoc = event.getBlock().getRelative(event.getDirection()).getLocation();
+        if (  StandUtility.getArmorstandFromLocation(extLoc) != null ) {
+            event.setCancelled(true);
+            return;
+        }
+
         // 動いたブロックのところにスタンドがあるなら、イベントをキャンセルする。
         for ( Block block : event.getBlocks() ) {
             Location location = block.getRelative(event.getDirection()).getLocation();
