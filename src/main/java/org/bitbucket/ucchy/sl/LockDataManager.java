@@ -122,12 +122,13 @@ public class LockDataManager {
             }
 
             ArmorStand stand = getArmorStandFromLocation(location, stands);
+            long time = config.getLong(key, -1);
 
             if ( stand == null ) {
                 continue;
             }
 
-            data.add(new LockData(uuid, stand));
+            data.add(new LockData(uuid, stand, time));
         }
 
         return data;
@@ -157,7 +158,7 @@ public class LockDataManager {
         ArrayList<LockData> datas = idMap.get(uuid);
         for ( LockData data : datas ) {
             String desc = getDescriptionFromLocation(data.getLocation());
-            config.set(desc, data.getStand().getType().name());
+            config.set(desc, data.getDate());
         }
 
         try {
@@ -194,7 +195,7 @@ public class LockDataManager {
         }
 
         // ロックデータ追加
-        LockData data = new LockData(uuid, stand);
+        LockData data = new LockData(uuid, stand, System.currentTimeMillis());
         idMap.get(uuid).add(data);
         standMap.put(stand.getUniqueId(), data);
 

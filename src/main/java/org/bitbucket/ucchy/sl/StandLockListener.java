@@ -5,6 +5,9 @@
  */
 package org.bitbucket.ucchy.sl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,6 +40,8 @@ public class StandLockListener implements Listener {
     private LockDataManager lockManager;
     private StandLockConfig config;
 
+    private SimpleDateFormat format;
+
     /**
      * コンストラクタ
      * @param parent
@@ -45,6 +50,8 @@ public class StandLockListener implements Listener {
         this.parent = parent;
         this.lockManager = parent.getLockDataManager();
         this.config = parent.getStandLockConfig();
+
+        this.format = new SimpleDateFormat(Messages.get("DateTimeFormat"));
     }
 
     /**
@@ -300,6 +307,14 @@ public class StandLockListener implements Listener {
                         "InformationOwner",
                         new String[]{"%player", "%uuid"},
                         new String[]{owner, ld.getOwnerUuid().toString()}));
+
+                if ( ld.getDate() > 0 ) {
+                    Date d = new Date();
+                    d.setTime(ld.getDate());
+                    String time = format.format(d);
+                    player.sendMessage(Messages.getMessageWithKeywords(
+                            "InformationTime", new String[]{"%time"}, new String[]{time}));
+                }
                 return true;
             }
 

@@ -24,14 +24,19 @@ public class LockData {
     /** ロック対象のArmorStand */
     private ArmorStand stand;
 
+    /** ロック日時 */
+    private long time;
+
     /**
      * コンストラクタ
      * @param uuid ロック所有者のUUID
      * @param stand ロック対象のArmorStand
+     * @param time ロック日時
      */
-    public LockData(UUID uuid, ArmorStand stand) {
+    public LockData(UUID uuid, ArmorStand stand, long time) {
         this.uuid = uuid;
         this.stand = stand;
+        this.time = time;
     }
 
     /**
@@ -62,6 +67,14 @@ public class LockData {
      */
     public Location getLocation() {
         return stand.getLocation();
+    }
+
+    /**
+     * ロック日時を返す
+     * @return ロック日時
+     */
+    public long getDate() {
+        return time;
     }
 
     /**
