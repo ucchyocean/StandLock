@@ -21,7 +21,6 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -79,18 +78,11 @@ public class StandLockListener implements Listener {
             return;
         }
 
-        final int pre = event.getItem().getAmount();
-        final ItemStack item = event.getItem();
         final Player player = event.getPlayer();
 
         // ここから、1tick後のスタンド設置後の処理を行う。
         new BukkitRunnable() {
             public void run() {
-
-                // アイテムの量が減っていないなら、スタンドは設置されていないので何もしない。
-                if ( pre == item.getAmount() ) {
-                    return;
-                }
 
                 // 設置されたスタンドを取得。
                 ArmorStand stand = StandUtility.getArmorstandFromLocation(location);
