@@ -24,6 +24,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -97,6 +98,7 @@ public class StandLockListener implements Listener {
                 if ( !player.hasPermission(StandLock.PERMISSION_ENTITY + ".place") ) {
                     player.sendMessage(Messages.get("PermissionDeniedPlace"));
                     stand.remove();
+                    player.getInventory().addItem(new ItemStack(Material.ARMOR_STAND));
                     return;
                 }
 
@@ -110,6 +112,7 @@ public class StandLockListener implements Listener {
                     if ( limit >= 0 && num >= limit ) {
                         player.sendMessage(Messages.get("ExceedLockLimit"));
                         stand.remove();
+                        player.getInventory().addItem(new ItemStack(Material.ARMOR_STAND));
                         return;
                     }
 
