@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bitbucket.ucchy</groupId>
   <artifactId>StandLock</artifactId>
-  <version>0.0.2</version>
+  <version>0.1.0</version>
 
   <licenses>
     <license>
@@ -74,6 +74,16 @@
       <name>Spigot Maven Repository</name>
       <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
     </repository>
+    <repository>
+      <id>pex-repo</id>
+      <name>PermissionsEx Repository</name>
+      <url>http://pex-repo.zachsthings.com</url>
+    </repository>
+    <repository>
+      <id>pex-repo-alt</id>
+      <name>PermissionsEx Alternative Repository</name>
+      <url>http://pex-repo.aoeu.xyz</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -81,6 +91,13 @@
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
       <version>1.8.8-R0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>ru.tehkode</groupId>
+      <artifactId>PermissionsEx</artifactId>
+      <version>1.23.3</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/PermissionsEx-1.23.3.jar</systemPath>
     </dependency>
   </dependencies>
 </project>

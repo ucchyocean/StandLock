@@ -19,11 +19,18 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class StandLock extends JavaPlugin {
 
+    protected static final String PERMISSION_ENTITY = "standlock.entity";
+    protected static final String PERMISSION_COMMAND = "standlock.command";
+    protected static final String PERMISSION_INFINITE_PLACE =
+            "standlock.entity.infinite-place";
+
     private static final String DATA_FOLDER = "data";
 
     private LockDataManager lockManager;
     private StandLockConfig config;
     private StandLockCommand command;
+
+    private PermissionsExBridge pex;
 
     /**
      * プラグインが有効化されたときに呼び出されるメソッド
@@ -42,6 +49,12 @@ public class StandLock extends JavaPlugin {
         // メッセージをロードする
         Messages.initialize(getFile(), getDataFolder());
         Messages.reload(config.getLang());
+
+        // PermissionsExをロード
+        if ( getServer().getPluginManager().isPluginEnabled("PermissionsEx") ) {
+            pex = PermissionsExBridge.load(
+                    getServer().getPluginManager().getPlugin("PermissionsEx"));
+        }
 
         // リスナークラスを登録する
         getServer().getPluginManager().registerEvents(
@@ -81,6 +94,14 @@ public class StandLock extends JavaPlugin {
      */
     protected StandLockConfig getStandLockConfig() {
         return config;
+    }
+
+    /**
+     * PermissionsExへのアクセスブリッジを取得する
+     * @return PermissionsExBridge、ロードされていなければnullになる
+     */
+    public PermissionsExBridge getPex() {
+        return pex;
     }
 
     /**

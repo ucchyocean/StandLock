@@ -32,10 +32,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class StandLockListener implements Listener {
 
-    private static final String PERMISSION = "standlock.entity";
-    private static final String PERMISSION_INFINITE_PLACE =
-            "standlock.entity.infinite-place";
-
     private StandLock parent;
     private LockDataManager lockManager;
     private StandLockConfig config;
@@ -98,7 +94,7 @@ public class StandLockListener implements Listener {
                 }
 
                 // 権限がなければ、操作を禁止する
-                if ( !player.hasPermission(PERMISSION + ".place") ) {
+                if ( !player.hasPermission(StandLock.PERMISSION_ENTITY + ".place") ) {
                     player.sendMessage(Messages.get("PermissionDeniedPlace"));
                     stand.remove();
                     return;
@@ -108,10 +104,10 @@ public class StandLockListener implements Listener {
                     // 自動ロック処理
 
                     // 設置数制限を超える場合は、設置を許可しない。
-                    if ( config.getArmorStandLimit() >= 0 &&
-                            !player.hasPermission(PERMISSION_INFINITE_PLACE) &&
-                            lockManager.getPlayerLockNum(player.getUniqueId()) >=
-                                config.getArmorStandLimit() ) {
+                    int num = lockManager.getPlayerLockNum(player.getUniqueId());
+                    int limit = lockManager.getPlayerStandLimit(player);
+
+                    if ( limit >= 0 && num >= limit ) {
                         player.sendMessage(Messages.get("ExceedLockLimit"));
                         stand.remove();
                         return;
@@ -189,7 +185,7 @@ public class StandLockListener implements Listener {
         LockData ld = lockManager.getLockDataByArmorStand(stand);
 
         if ( ld != null && !ld.getOwnerUuid().equals(event.getPlayer().getUniqueId()) &&
-                !event.getPlayer().hasPermission(PERMISSION + ".admin") ) {
+                !event.getPlayer().hasPermission(StandLock.PERMISSION_ENTITY + ".admin") ) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(Messages.get("ArmorStandLocked"));
             return;
@@ -238,7 +234,7 @@ public class StandLockListener implements Listener {
         if ( ld == null ) {
 
             // 権限がなければ、操作を禁止する
-            if ( damager == null || !damager.hasPermission(PERMISSION + ".break") ) {
+            if ( damager == null || !damager.hasPermission(StandLock.PERMISSION_ENTITY + ".break") ) {
                 if ( damager != null ) {
                     damager.sendMessage(Messages.get("PermissionDeniedBreak"));
                 }
@@ -251,7 +247,7 @@ public class StandLockListener implements Listener {
 
         // 所有者でなくて、管理者でもなければ、操作を禁止する
         if ( damager == null || (!ld.getOwnerUuid().equals(damager.getUniqueId()) &&
-                !damager.hasPermission(PERMISSION + ".admin") ) ) {
+                !damager.hasPermission(StandLock.PERMISSION_ENTITY + ".admin") ) ) {
             event.setCancelled(true);
             if ( damager != null ) {
                 damager.sendMessage(Messages.get("ArmorStandLocked"));
@@ -331,7 +327,7 @@ public class StandLockListener implements Listener {
 
                 // 設置数制限を超える場合は、設置を許可しない。
                 if ( config.getArmorStandLimit() >= 0 &&
-                        !player.hasPermission(PERMISSION_INFINITE_PLACE) &&
+                        !player.hasPermission(StandLock.PERMISSION_INFINITE_PLACE) &&
                         lockManager.getPlayerLockNum(player.getUniqueId()) >=
                             config.getArmorStandLimit() ) {
                     player.sendMessage(Messages.get("ExceedLockLimit"));
@@ -367,7 +363,7 @@ public class StandLockListener implements Listener {
 
             } else {
                 // Adminではなくて、かつ、クリックした人のスタンドでないなら、操作を禁止する
-                if ( !player.hasPermission(PERMISSION + ".admin") &&
+                if ( !player.hasPermission(StandLock.PERMISSION_ENTITY + ".admin") &&
                         !ld.getOwnerUuid().equals(player.getUniqueId()) ) {
                     player.sendMessage(Messages.get("ArmorStandNotOwner"));
                     return true;

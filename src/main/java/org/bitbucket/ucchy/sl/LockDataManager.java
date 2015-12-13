@@ -18,6 +18,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 
 /**
  * ロックデータマネージャ
@@ -237,6 +238,32 @@ public class LockDataManager {
             return idMap.get(uuid).size();
         }
         return 0;
+    }
+
+    /**
+     * 指定されたプレイヤーの設置上限数を返す
+     * @param player プレイヤー
+     * @return 設置上限数(ただし、-1は無限大を示す)
+     */
+    public int getPlayerStandLimit(Player player) {
+
+        if ( player.hasPermission(StandLock.PERMISSION_INFINITE_PLACE) ) {
+            return -1;
+        }
+
+        StandLockConfig config = StandLock.getInstance().getStandLockConfig();
+        int limit = config.getArmorStandLimit();
+
+        if ( limit <= -1 ) {
+            return -1;
+        }
+
+        if ( StandLock.getInstance().getPex() != null ) {
+            return StandLock.getInstance().getPex().getPlayerIntegerOptionValue(
+                    player, "standlock-limit", limit);
+        }
+
+        return limit;
     }
 
 

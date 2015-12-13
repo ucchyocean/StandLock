@@ -20,10 +20,6 @@ public class StandLockCommand implements TabExecutor {
     protected static final String META_REMOVE_COMMAND = "standlockremove";
     protected static final String META_PERSIST_MODE = "standlockpersist";
 
-    private static final String PERMISSION = "standlock.command";
-    private static final String PERMISSION_INFINITE_PLACE =
-            "standlock.entity.infinite-place";
-
     private StandLock parent;
     private LockDataManager lockManager;
     private StandLockConfig config;
@@ -95,7 +91,7 @@ public class StandLockCommand implements TabExecutor {
                 String pre = args[0].toLowerCase();
                 ArrayList<String> kandidates = new ArrayList<String>();
                 for ( String com : new String[]{"info", "limits", "private", "remove", "reload"} ) {
-                    if ( com.startsWith(pre) && sender.hasPermission(PERMISSION + "." + com) ) {
+                    if ( com.startsWith(pre) && sender.hasPermission(StandLock.PERMISSION_COMMAND + "." + com) ) {
                         kandidates.add(com);
                     }
                 }
@@ -115,7 +111,7 @@ public class StandLockCommand implements TabExecutor {
      */
     private boolean doInfo(CommandSender sender, Command command, String label, String[] args) {
 
-        if  ( !sender.hasPermission(PERMISSION + ".info") ) {
+        if  ( !sender.hasPermission(StandLock.PERMISSION_COMMAND + ".info") ) {
             sender.sendMessage(Messages.get("PermissionDeniedCommand"));
             return true;
         }
@@ -144,7 +140,7 @@ public class StandLockCommand implements TabExecutor {
      */
     private boolean doLimits(CommandSender sender, Command command, String label, String[] args) {
 
-        if  ( !sender.hasPermission(PERMISSION + ".limits") ) {
+        if  ( !sender.hasPermission(StandLock.PERMISSION_COMMAND + ".limits") ) {
             sender.sendMessage(Messages.get("PermissionDeniedCommand"));
             return true;
         }
@@ -158,12 +154,12 @@ public class StandLockCommand implements TabExecutor {
 
         // 現在の設置数と、制限数を取得し、表示する。
         int now = lockManager.getPlayerLockNum(player.getUniqueId());
-        int limit = config.getArmorStandLimit();
+        int limit = lockManager.getPlayerStandLimit(player);
         String limits;
-        if ( limit >= 0 && !player.hasPermission(PERMISSION_INFINITE_PLACE) ) {
-            limits = Integer.toString(limit);
-        } else {
+        if ( limit == -1 ) {
             limits = Messages.get("Infinity");
+        } else {
+            limits = Integer.toString(limit);
         }
         player.sendMessage(Messages.getMessageWithKeywords(
                 "InformationLimits",
@@ -183,7 +179,7 @@ public class StandLockCommand implements TabExecutor {
      */
     private boolean doPrivate(CommandSender sender, Command command, String label, String[] args) {
 
-        if  ( !sender.hasPermission(PERMISSION + ".private") ) {
+        if  ( !sender.hasPermission(StandLock.PERMISSION_COMMAND + ".private") ) {
             sender.sendMessage(Messages.get("PermissionDeniedCommand"));
             return true;
         }
@@ -212,7 +208,7 @@ public class StandLockCommand implements TabExecutor {
      */
     private boolean doRemove(CommandSender sender, Command command, String label, String[] args) {
 
-        if  ( !sender.hasPermission(PERMISSION + ".remove") ) {
+        if  ( !sender.hasPermission(StandLock.PERMISSION_COMMAND + ".remove") ) {
             sender.sendMessage(Messages.get("PermissionDeniedCommand"));
             return true;
         }
@@ -241,7 +237,7 @@ public class StandLockCommand implements TabExecutor {
      */
     private boolean doPersist(CommandSender sender, Command command, String label, String[] args) {
 
-        if  ( !sender.hasPermission(PERMISSION + ".remove") ) {
+        if  ( !sender.hasPermission(StandLock.PERMISSION_COMMAND + ".persist") ) {
             sender.sendMessage(Messages.get("PermissionDeniedCommand"));
             return true;
         }
@@ -324,7 +320,7 @@ public class StandLockCommand implements TabExecutor {
      */
     private boolean doReload(CommandSender sender, Command command, String label, String[] args) {
 
-        if  ( !sender.hasPermission(PERMISSION + ".reload") ) {
+        if  ( !sender.hasPermission(StandLock.PERMISSION_COMMAND + ".reload") ) {
             sender.sendMessage(Messages.get("PermissionDeniedCommand"));
             return true;
         }
