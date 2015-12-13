@@ -39,6 +39,13 @@ public class StandLock extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        // サーバーのバージョンが v1.7.10 以前なら、プラグインを停止して動作しない。
+        if ( !Utility.isCB18orLater() ) {
+            getLogger().warning("Bukkit 1.7.x 以前のバージョンでは、このプラグインは動作しません。");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         // マネージャを生成し、データをロードする
         lockManager = new LockDataManager(
                 new File(getDataFolder(), DATA_FOLDER));
