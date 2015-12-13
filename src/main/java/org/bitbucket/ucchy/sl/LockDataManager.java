@@ -260,7 +260,7 @@ public class LockDataManager {
 
         if ( StandLock.getInstance().getPex() != null ) {
             return StandLock.getInstance().getPex().getPlayerIntegerOptionValue(
-                    player, "standlock-limit", limit);
+                    player, "armorStandLimit", limit);
         }
 
         return limit;

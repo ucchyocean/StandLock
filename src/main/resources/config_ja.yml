@@ -9,6 +9,9 @@ lang: ja
 # 1人あたりのArmorStandの設置数上限です。-1で無限大に設定することができます。
 # パーミッション "standlock.entity.infinite-place" を持っている人や、OPは、
 # この制限を受けずに無制限に設置可能です。
+# また、PermissionsExのグループやユーザーのoptionsに、
+#   armorStandLimit: 10
+# のように指定すると、そのグループやユーザーのみ、設置数上限を10に変更することができます。
 armorStandLimit: 50
 
 # スタンドを設置した時に、自動的にロックがかかるかどうかを設定することができます。
