@@ -93,6 +93,9 @@ permissions:
   standlock.entity.break:
     description: Permission to remove none-locked ArmorStand.
     default: true
+  standlock.entity.interact:
+    description: Permission to interact none-locked ArmorStand.
+    default: true
   standlock.entity.admin:
     description: Permission to access none-owner locked ArmorStand.
     default: op
@@ -104,6 +107,7 @@ permissions:
     children:
       standlock.entity.place: true
       standlock.entity.break: true
+      standlock.entity.interact: true
       standlock.entity.admin: true
       standlock.entity.infinite-place: true
 

@@ -179,18 +179,22 @@ public class StandLockListener implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onPlayerArmorStandManipulate(PlayerArmorStandManipulateEvent event) {
 
-        // MEMO: このイベントハンドラは、
-        //   スタンドにアイテムを入れたり出したりした時に呼び出されるので、
-        //   所有者を確認して、所有者でなければメッセージを表示して操作をキャンセルする。
-
         // ロックデータ取得
         ArmorStand stand = event.getRightClicked();
         LockData ld = lockManager.getLockDataByArmorStand(stand);
 
+        // ロック情報が無い場合は、権限を確認して、権限が無ければメッセージを表示して操作をキャンセルする。
+        if ( ld == null && !event.getPlayer().hasPermission(StandLock.PERMISSION_ENTITY + ".interact") ) {
+            event.getPlayer().sendMessage(Messages.get("PermissionDeniedInteract"));
+            event.setCancelled(true);
+            return;
+        }
+
+        // ロック情報がある場合は、所有者を確認して、所有者でなければメッセージを表示して操作をキャンセルする。
         if ( ld != null && !ld.getOwnerUuid().equals(event.getPlayer().getUniqueId()) &&
                 !event.getPlayer().hasPermission(StandLock.PERMISSION_ENTITY + ".admin") ) {
-            event.setCancelled(true);
             event.getPlayer().sendMessage(Messages.get("ArmorStandLocked"));
+            event.setCancelled(true);
             return;
         }
     }
