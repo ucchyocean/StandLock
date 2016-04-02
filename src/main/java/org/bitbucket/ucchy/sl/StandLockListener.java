@@ -259,6 +259,12 @@ public class StandLockListener implements Listener {
             if ( damager != null ) {
                 damager.sendMessage(Messages.get("ArmorStandLocked"));
             }
+
+            // ダメージを与えたのが飛来物なら、CB1.9以降はイベントをキャンセルするだけだと跳ね返るので、
+            // エンティティを除去しておく。
+            if ( event.getDamager() instanceof Projectile ) {
+                event.getDamager().remove();
+            }
             return;
         }
 
