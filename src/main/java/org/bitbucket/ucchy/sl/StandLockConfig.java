@@ -20,6 +20,8 @@ public class StandLockConfig {
     private String lang;
     private int armorStandLimit;
     private boolean autoLock;
+    private int cleanupTaskDelay;
+    private boolean cleanupTaskLog;
 
     /**
      * コンストラクタ
@@ -52,6 +54,9 @@ public class StandLockConfig {
         lang = conf.getString("lang", "ja");
         armorStandLimit = conf.getInt("armorStandLimit", 100);
         autoLock = conf.getBoolean("autoLock", true);
+
+        cleanupTaskDelay = conf.getInt("cleanupTaskDelay", 1);
+        cleanupTaskLog = conf.getBoolean("cleanupTaskLog", true);
     }
 
     public String getLang() {
@@ -64,5 +69,19 @@ public class StandLockConfig {
 
     public boolean isAutoLock() {
         return autoLock;
+    }
+
+    /**
+     * @return cleanupTaskDelay
+     */
+    public int getCleanupTaskDelay() {
+        return cleanupTaskDelay;
+    }
+
+    /**
+     * @return cleanupTaskLog
+     */
+    public boolean isCleanupTaskLog() {
+        return cleanupTaskLog;
     }
 }

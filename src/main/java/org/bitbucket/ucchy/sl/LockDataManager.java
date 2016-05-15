@@ -9,8 +9,8 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -32,8 +32,8 @@ public class LockDataManager {
     /** ロックデータの、プレイヤーUUIDをキーとしたマップ */
     private HashMap<UUID, ArrayList<LockData>> idMap;
 
-    /** ロックデータの、ArmorStandのUUIDをキーとしたマップ */
-    private HashMap<UUID, LockData> standMap;
+    /** ロックデータの、Locationをキーとしたマップ */
+    private HashMap<String, LockData> locationMap;
 
     /**
      * コンストラクタ
@@ -68,16 +68,12 @@ public class LockDataManager {
             }
         });
 
-        // 全ワールドに存在する全てのArmorStandを取得
-        HashMap<String, Collection<ArmorStand>> stands =
-                new HashMap<String, Collection<ArmorStand>>();
-        for ( World world : Bukkit.getWorlds() ) {
-            stands.put(world.getName(), world.getEntitiesByClass(ArmorStand.class));
-        }
-
         // 全てのデータをロード
         idMap = new HashMap<UUID, ArrayList<LockData>>();
-        standMap = new HashMap<UUID, LockData>();
+        locationMap = new HashMap<String, LockData>();
+
+        // filesがnullなら、何もしない。
+        if ( files == null ) return;
 
         for ( File file : files ) {
 
@@ -91,11 +87,11 @@ public class LockDataManager {
             UUID uuid = UUID.fromString(key);
 
             // データをロードする
-            idMap.put(uuid, loadLockData(file, uuid, stands));
+            idMap.put(uuid, loadLockData(file, uuid));
 
-            // Hangingマップにも展開する
+            // Locationマップにも展開する
             for ( LockData ld : idMap.get(uuid) ) {
-                standMap.put(ld.getStand().getUniqueId(), ld);
+                locationMap.put(getDescriptionFromLocation(ld.getLocation()), ld);
             }
         }
     }
@@ -103,12 +99,10 @@ public class LockDataManager {
     /**
      * プレイヤーファイルから、ロックデータをロードする
      * @param file プレイヤーファイル
-     * @param uuid プレイヤーのUUID（あらかじめ取得したもの）
-     * @param stands 全ワールドのArmorStand（あらかじめ取得したもの）
+     * @param uuid プレイヤーのUUID
      * @return ロードされたロックデータ
      */
-    private ArrayList<LockData> loadLockData(File file, UUID uuid,
-            HashMap<String, Collection<ArmorStand>> stands) {
+    private ArrayList<LockData> loadLockData(File file, UUID uuid) {
 
         YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
         ArrayList<LockData> data = new ArrayList<LockData>();
@@ -122,14 +116,9 @@ public class LockDataManager {
                 continue;
             }
 
-            ArmorStand stand = getArmorStandFromLocation(location, stands);
             long time = config.getLong(key, -1);
 
-            if ( stand == null ) {
-                continue;
-            }
-
-            data.add(new LockData(uuid, stand, time));
+            data.add(new LockData(uuid, location, time));
         }
 
         return data;
@@ -175,7 +164,16 @@ public class LockDataManager {
      * @return ロックデータ
      */
     public LockData getLockDataByArmorStand(ArmorStand stand) {
-        return standMap.get(stand.getUniqueId());
+        if ( stand == null ) return null;
+        return locationMap.get(getDescriptionFromLocation(stand.getLocation()));
+    }
+
+    /**
+     * 全てのロックデータを取得する
+     * @return 全てのロックデータ
+     */
+    public List<LockData> getAllLockData() {
+        return new ArrayList<LockData>(locationMap.values());
     }
 
     /**
@@ -185,8 +183,11 @@ public class LockDataManager {
      */
     public void addLockData(UUID uuid, ArmorStand stand) {
 
+        if ( uuid == null || stand == null ) return;
+
         // 既にロックデータが存在する場合は、古いデータを削除する
-        if ( standMap.containsKey(stand.getUniqueId()) ) {
+        String locDesc = getDescriptionFromLocation(stand.getLocation());
+        if ( locationMap.containsKey(locDesc) ) {
             removeLockData(stand);
         }
 
@@ -196,9 +197,9 @@ public class LockDataManager {
         }
 
         // ロックデータ追加
-        LockData data = new LockData(uuid, stand, System.currentTimeMillis());
+        LockData data = new LockData(uuid, stand.getLocation(), System.currentTimeMillis());
         idMap.get(uuid).add(data);
-        standMap.put(stand.getUniqueId(), data);
+        locationMap.put(locDesc, data);
 
         // データを保存
         saveData(uuid);
@@ -210,15 +211,43 @@ public class LockDataManager {
      */
     public void removeLockData(ArmorStand stand) {
 
+        if ( stand == null ) return;
+
         // 既にロックデータが無い場合は、何もしない
-        if ( !standMap.containsKey(stand.getUniqueId()) ) {
+        String locDesc = getDescriptionFromLocation(stand.getLocation());
+        if ( !locationMap.containsKey(locDesc) ) {
             return;
         }
 
-        LockData ld = standMap.get(stand.getUniqueId());
+        LockData ld = locationMap.get(locDesc);
 
         // 削除を実行
-        standMap.remove(stand.getUniqueId());
+        locationMap.remove(locDesc);
+        if ( idMap.containsKey(ld.getOwnerUuid()) ) {
+            idMap.get(ld.getOwnerUuid()).remove(ld);
+        }
+
+        // データを保存
+        saveData(ld.getOwnerUuid());
+    }
+
+    /**
+     * ロックデータを削除する
+     * @param locationDescription 削除する額縁の位置情報文字列
+     */
+    public void removeLockData(String locationDescription) {
+
+        if ( locationDescription == null ) return;
+
+        // 既にロックデータが無い場合は、何もしない
+        if ( !locationMap.containsKey(locationDescription) ) {
+            return;
+        }
+
+        LockData ld = locationMap.get(locationDescription);
+
+        // 削除を実行
+        locationMap.remove(locationDescription);
         if ( idMap.containsKey(ld.getOwnerUuid()) ) {
             idMap.get(ld.getOwnerUuid()).remove(ld);
         }
@@ -264,30 +293,6 @@ public class LockDataManager {
         }
 
         return limit;
-    }
-
-
-    /**
-     * 指定された場所に存在するHangingを取得する
-     * @param location 場所
-     * @param stands 全ワールドのArmorStand（あらかじめ取得したもの）
-     * @return ArmorStand、指定した場所に存在しなければnull
-     */
-    private ArmorStand getArmorStandFromLocation(Location location,
-            HashMap<String, Collection<ArmorStand>> stands) {
-
-        if ( !stands.containsKey(location.getWorld().getName()) ) {
-            return null;
-        }
-
-        for ( ArmorStand stand : stands.get(location.getWorld().getName()) ) {
-            if ( location.getBlockX() == stand.getLocation().getBlockX() &&
-                    location.getBlockY() == stand.getLocation().getBlockY() &&
-                    location.getBlockZ() == stand.getLocation().getBlockZ() ) {
-                return stand;
-            }
-        }
-        return null;
     }
 
     /**

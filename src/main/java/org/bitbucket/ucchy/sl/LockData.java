@@ -10,7 +10,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.ArmorStand;
 
 /**
  * ロックデータ
@@ -21,8 +20,8 @@ public class LockData {
     /** ロック所有者のUUID */
     private UUID uuid;
 
-    /** ロック対象のArmorStand */
-    private ArmorStand stand;
+    /** ロック対象のLocation */
+    private Location location;
 
     /** ロック日時 */
     private long time;
@@ -33,9 +32,9 @@ public class LockData {
      * @param stand ロック対象のArmorStand
      * @param time ロック日時
      */
-    public LockData(UUID uuid, ArmorStand stand, long time) {
+    public LockData(UUID uuid, Location location, long time) {
         this.uuid = uuid;
-        this.stand = stand;
+        this.location = location;
         this.time = time;
     }
 
@@ -44,13 +43,6 @@ public class LockData {
      */
     public UUID getOwnerUuid() {
         return uuid;
-    }
-
-    /**
-     * @return stand
-     */
-    public ArmorStand getStand() {
-        return stand;
     }
 
     /**
@@ -66,7 +58,7 @@ public class LockData {
      * @return 場所
      */
     public Location getLocation() {
-        return stand.getLocation();
+        return location;
     }
 
     /**
@@ -82,6 +74,6 @@ public class LockData {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return String.format("LockData{uuid=%s,stand=%s}", uuid, stand);
+        return String.format("LockData{uuid=%s,location=%s}", uuid, location);
     }
 }
