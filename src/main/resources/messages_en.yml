@@ -16,6 +16,8 @@ ArmorStandUnlocked: '&cThis armor stand is not locked.'
 ArmorStandAlreadyLocked: '&cThis armor stand is locked already.'
 ArmorStandNotOwner: '&cYou cannot unlock, because this armor stand is owned by the other player.'
 NotInGame: '&cThis command can be run only in game.'
+WorldNotFound: '&cThe specified world is not found.'
+WorldLockDataNotFound: '&cThere are not any lock data in the specified world.'
 
 PersistMode: '&bYou entered a persist mode. To exit mode, please run "/spersist" command.'
 PersistOff: '&bYou exited a persist mode.'
@@ -26,6 +28,7 @@ PunchUnlock: '&bPunch the armor stand to unlock.'
 LockRemoved: '&aArmor stand lock was removed.'
 Locked: '&aArmor stand was locked'
 
+InformationCleanup: '&a%num lock data(s) of %world world are deleted.'
 InformationReload: '&aAll data were reloaded.'
 
 InformationOwner: 'Owner: &a%player&r(&a%uuid&r)'

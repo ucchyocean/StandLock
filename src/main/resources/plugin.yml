@@ -15,6 +15,7 @@ commands:
            /<command> private - Lock armor stand.
            /<command> remove - Unlock armor stand.
            /<command> persist [lock|unlock|info|off] - Lock/Unlock armor stand repeatedly.
+           /<command> cleanup (WorldName) - Cleaup all lock datas of the specified world.
            /<command> reload - Reload all of data.
     permission: standlock.command
     permission-message: 'You don''t have a permission "<permission>".'
@@ -73,6 +74,9 @@ permissions:
   standlock.command.persist:
     description: Permission of persist command.
     default: true
+  standlock.command.cleanup:
+    description: Permission of cleanup command.
+    default: op
   standlock.command.reload:
     description: Permission of reload command.
     default: op
@@ -85,6 +89,7 @@ permissions:
       standlock.command.private: true
       standlock.command.remove: true
       standlock.command.persist: true
+      standlock.command.cleanup: true
       standlock.command.reload: true
 
   standlock.entity.place:

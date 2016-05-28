@@ -55,7 +55,7 @@ public class StandLockConfig {
         armorStandLimit = conf.getInt("armorStandLimit", 100);
         autoLock = conf.getBoolean("autoLock", true);
 
-        cleanupTaskDelay = conf.getInt("cleanupTaskDelay", 1);
+        cleanupTaskDelay = conf.getInt("cleanupTaskDelay", -1);
         cleanupTaskLog = conf.getBoolean("cleanupTaskLog", true);
     }
 
