@@ -24,3 +24,9 @@ cleanupTaskDelay: -1
 
 # クリーンアップが実行されたときに、削除されたロック情報をコンソールログに表示します。
 cleanupTaskLog: true
+
+# ArmorStand Editor が一緒に動作しているときに、StandLockのロックデータに従って
+# アーマースタンドを編集できるようにするかどうかを指定します。
+# 注意：この設定は、/sl reload コマンドでは適用されません。
+#       サーバーをreloadして、設定を反映してください。
+cooperateWithArmorStandEditor: true

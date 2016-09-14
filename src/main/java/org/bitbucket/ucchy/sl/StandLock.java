@@ -8,6 +8,8 @@ package org.bitbucket.ucchy.sl;
 import java.io.File;
 import java.util.List;
 
+import org.bitbucket.ucchy.sl.bridge.ArmorStandEditorBridge;
+import org.bitbucket.ucchy.sl.bridge.PermissionsExBridge;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,9 +21,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class StandLock extends JavaPlugin {
 
-    protected static final String PERMISSION_ENTITY = "standlock.entity";
-    protected static final String PERMISSION_COMMAND = "standlock.command";
-    protected static final String PERMISSION_INFINITE_PLACE =
+    public static final String PERMISSION_ENTITY = "standlock.entity";
+    public static final String PERMISSION_COMMAND = "standlock.command";
+    public static final String PERMISSION_INFINITE_PLACE =
             "standlock.entity.infinite-place";
 
     private static final String DATA_FOLDER = "data";
@@ -63,6 +65,13 @@ public class StandLock extends JavaPlugin {
                     getServer().getPluginManager().getPlugin("PermissionsEx"));
         }
 
+        // ArmorStand Editor と連携する
+        if ( getServer().getPluginManager().isPluginEnabled("ArmorStandEditor")
+                && config.isCooperateWithArmorStandEditor() ) {
+            ArmorStandEditorBridge.registerToArmorStandEditor(
+                    getServer().getPluginManager().getPlugin("ArmorStandEditor"));
+        }
+
         // リスナークラスを登録する
         getServer().getPluginManager().registerEvents(
                 new StandLockListener(this), this);
@@ -97,7 +106,7 @@ public class StandLock extends JavaPlugin {
      * ロックデータマネージャを返す
      * @return ロックデータマネージャ
      */
-    protected LockDataManager getLockDataManager() {
+    public LockDataManager getLockDataManager() {
         return lockManager;
     }
 
@@ -105,7 +114,7 @@ public class StandLock extends JavaPlugin {
      * コンフィグデータを返す
      * @return
      */
-    protected StandLockConfig getStandLockConfig() {
+    public StandLockConfig getStandLockConfig() {
         return config;
     }
 
@@ -129,7 +138,7 @@ public class StandLock extends JavaPlugin {
      * このプラグインのインスタンスを返す。
      * @return インスタンス
      */
-    protected static StandLock getInstance() {
+    public static StandLock getInstance() {
         return (StandLock)Bukkit.getPluginManager().getPlugin("StandLock");
     }
 }

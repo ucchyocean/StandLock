@@ -1,4 +1,4 @@
-package org.bitbucket.ucchy.sl;
+package org.bitbucket.ucchy.sl.bridge;
 
 import java.util.ArrayList;
 import java.util.Collection;

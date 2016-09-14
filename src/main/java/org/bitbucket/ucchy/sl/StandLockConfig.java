@@ -22,6 +22,7 @@ public class StandLockConfig {
     private boolean autoLock;
     private int cleanupTaskDelay;
     private boolean cleanupTaskLog;
+    private boolean cooperateWithArmorStandEditor;
 
     /**
      * コンストラクタ
@@ -57,6 +58,9 @@ public class StandLockConfig {
 
         cleanupTaskDelay = conf.getInt("cleanupTaskDelay", -1);
         cleanupTaskLog = conf.getBoolean("cleanupTaskLog", true);
+
+        cooperateWithArmorStandEditor =
+                conf.getBoolean("cooperateWithArmorStandEditor", true);
     }
 
     public String getLang() {
@@ -84,4 +88,9 @@ public class StandLockConfig {
     public boolean isCleanupTaskLog() {
         return cleanupTaskLog;
     }
+
+    public boolean isCooperateWithArmorStandEditor() {
+        return cooperateWithArmorStandEditor;
+    }
+
 }
