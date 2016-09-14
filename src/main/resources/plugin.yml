@@ -3,7 +3,7 @@ version: ${project.version}
 main: org.bitbucket.ucchy.sl.StandLock
 description: Armorstand lock plugin
 author: ucchy
-softdepend: [Multiverse-Core,MultiWorld,PermissionsEx]
+softdepend: [Multiverse-Core,MultiWorld,PermissionsEx,ArmorStandEditor]
 
 commands:
   standlock:
