@@ -8,7 +8,6 @@ package org.bitbucket.ucchy.sl;
 import java.io.File;
 import java.util.List;
 
-import org.bitbucket.ucchy.sl.bridge.ArmorStandEditorBridge;
 import org.bitbucket.ucchy.sl.bridge.PermissionsExBridge;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -66,11 +65,13 @@ public class StandLock extends JavaPlugin {
         }
 
         // ArmorStand Editor と連携する
+        /* この部分は、ArmorStandEditor1.9.4-0.1.11 との組み合わせでしか動作しない。see issue #13
         if ( getServer().getPluginManager().isPluginEnabled("ArmorStandEditor")
                 && config.isCooperateWithArmorStandEditor() ) {
             ArmorStandEditorBridge.registerToArmorStandEditor(
                     getServer().getPluginManager().getPlugin("ArmorStandEditor"));
         }
+        */
 
         // リスナークラスを登録する
         getServer().getPluginManager().registerEvents(
