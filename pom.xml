@@ -104,7 +104,7 @@
       <artifactId>ArmorStandEditor</artifactId>
       <version>1.9.4-0.1.11</version>
       <scope>system</scope>
-      <systemPath>${basedir}/lib/ArmorStandEditor.jar</systemPath>
+      <systemPath>${basedir}/lib/ArmorStandEditor1.9.4-0.1.11.jar</systemPath>
     </dependency>
   </dependencies>
 </project>
